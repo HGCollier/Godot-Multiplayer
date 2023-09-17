@@ -2,11 +2,13 @@ extends CharacterBody3D
 
 const SPEED = 7.0
 const JUMP_VELOCITY = 8
+const MAX_AMMO = 6
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 signal health_changed(health)
+signal ammo_changed(ammo)
 
 @onready var camera = $Camera3D
 @onready var animation_player = $AnimationPlayer
@@ -14,6 +16,7 @@ signal health_changed(health)
 @onready var raycast = $Camera3D/RayCast3D
 
 var health = 5
+var ammo = MAX_AMMO
 
 func _ready():
 	if not is_multiplayer_authority(): return
@@ -38,7 +41,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
-	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot":
+	if animation_player.current_animation == "reload" || animation_player.current_animation == "shoot":
+		return
+		
+	if event.is_action_pressed("reload"):
+		animation_player.stop()
+		animation_player.play("reload")
+		ammo = MAX_AMMO
+		return
+		
+	if event.is_action_pressed("shoot"):
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
@@ -76,7 +88,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		
-	if (animation_player.current_animation == "shoot"):
+	if (animation_player.current_animation == "shoot" || animation_player.current_animation == "reload"):
 		pass
 	elif input_dir != Vector2.ZERO and is_on_floor():
 		animation_player.play("move")
@@ -87,19 +99,28 @@ func _physics_process(delta: float) -> void:
 	
 @rpc("call_local")
 func play_shoot_effects():
+	if ammo <= 0:
+		return
 	animation_player.stop()
 	animation_player.play("shoot")
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
+	ammo -= 1
+	print(ammo)
+	ammo_changed.emit(ammo)
 
 @rpc("any_peer")
 func receive_damage():
 	health -= 1
 	if health <= 0:
-		health = 5
-		position = Vector3.ZERO
-		position.y += 1
+		respawn_player.rpc()
 	health_changed.emit(health)
+
+@rpc("call_local")
+func respawn_player():
+	health = 5
+	position = Vector3.ZERO
+	position.y += 1
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":

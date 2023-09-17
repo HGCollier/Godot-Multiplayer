@@ -3,7 +3,8 @@ extends CanvasLayer
 @onready var main_menu = $MainMenu
 @onready var ip_address = $MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/IPAddress
 @onready var hud = $HUD
-@onready var healthbar = $HUD/Healthbar
+@onready var healthbar = $HUD/VBoxContainer/Healthbar
+@onready var ammo = $HUD/VBoxContainer/Ammo
 
 const PLAYER = preload("res://Player.tscn")
 const PORT = 25576
@@ -31,9 +32,14 @@ func _on_join_button_pressed():
 func add_player(peer_id):
 	var player = PLAYER.instantiate()
 	player.name = str(peer_id)
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(randi_range(0, 1), randi_range(0, 1), randi_range(0, 1))
+	player.get_node("MeshInstance3D").set_material_override(material)
+	
 	$"..".add_child(player)
 	if player.is_multiplayer_authority():
 		player.health_changed.connect(update_healthbar)
+		player.ammo_changed.connect(update_ammo)
 
 func remove_player(peer_id):
 	var player = $"..".get_node_or_null(str(peer_id))
@@ -56,7 +62,11 @@ func upnp_setup():
 	
 func update_healthbar(value):
 	healthbar.value = value
+	
+func update_ammo(value):
+	ammo.text = "%s/∞" % value
 
 func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_healthbar)
+		node.ammo_changed.connect(update_ammo)

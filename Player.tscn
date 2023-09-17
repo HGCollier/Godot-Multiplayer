@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cjdo6rarngi3a"]
+[gd_scene load_steps=18 format=3 uid="uid://cjdo6rarngi3a"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_ifukt"]
 [ext_resource type="PackedScene" uid="uid://b5p5ak2exca73" path="res://Models/Pistol.blend" id="2_bmgoa"]
@@ -113,7 +113,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_lnvkf"]
 resource_name = "shoot"
-length = 0.4
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -121,7 +121,7 @@ tracks/0/path = NodePath("Camera3D/Pistol:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(0.644057, -0.209358, -0.795), Vector3(0.644057, -0.335357, -0.795)]
@@ -133,10 +133,38 @@ tracks/1/path = NodePath("Camera3D/Pistol:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(0.5, 1),
 "update": 0,
 "values": [Vector3(-0.469668, -3.14159, -7.66377e-08), Vector3(0, -3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_km6j3"]
+resource_name = "reload"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(0.5, 1, 0.5),
+"update": 0,
+"values": [Vector3(0.534, -0.509, -0.795), Vector3(0.665336, 0.0767456, -0.795), Vector3(0.644, -0.52, -0.795)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 2),
+"update": 0,
+"values": [Vector3(12.5664, -3.0997, -0.521853), Vector3(0, -3.14159, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_m05r7"]
@@ -144,6 +172,7 @@ _data = {
 "RESET": SubResource("Animation_ys3wj"),
 "idle": SubResource("Animation_4bu3j"),
 "move": SubResource("Animation_sf088"),
+"reload": SubResource("Animation_km6j3"),
 "shoot": SubResource("Animation_lnvkf")
 }
 
