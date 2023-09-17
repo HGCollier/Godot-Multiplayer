@@ -48,9 +48,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		animation_player.stop()
 		animation_player.play("reload")
 		ammo = MAX_AMMO
+		ammo_changed.emit(ammo)
 		return
 		
-	if event.is_action_pressed("shoot"):
+	if event.is_action_pressed("shoot") and ammo > 0:
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
@@ -106,7 +107,6 @@ func play_shoot_effects():
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
 	ammo -= 1
-	print(ammo)
 	ammo_changed.emit(ammo)
 
 @rpc("any_peer")
@@ -119,8 +119,11 @@ func receive_damage():
 @rpc("call_local")
 func respawn_player():
 	health = 5
+	ammo = MAX_AMMO
 	position = Vector3.ZERO
 	position.y += 1
+	health_changed.emit(health)
+	ammo_changed.emit(ammo)
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":

@@ -32,11 +32,12 @@ func _on_join_button_pressed():
 func add_player(peer_id):
 	var player = PLAYER.instantiate()
 	player.name = str(peer_id)
-	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(randi_range(0, 1), randi_range(0, 1), randi_range(0, 1))
-	player.get_node("MeshInstance3D").set_material_override(material)
-	
 	$"..".add_child(player)
+	var rng = RandomNumberGenerator.new()
+	rng.seed = peer_id
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(rng.randi_range(0, 1), rng.randi_range(0, 1), rng.randi_range(0, 1))
+	player.get_node("MeshInstance3D").set_material_override(material)
 	if player.is_multiplayer_authority():
 		player.health_changed.connect(update_healthbar)
 		player.ammo_changed.connect(update_ammo)
@@ -67,6 +68,11 @@ func update_ammo(value):
 	ammo.text = "%s/∞" % value
 
 func _on_multiplayer_spawner_spawned(node):
+	var rng = RandomNumberGenerator.new()
+	rng.seed = str(node.name).to_int()
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(rng.randi_range(0, 1), rng.randi_range(0, 1), rng.randi_range(0, 1))
+	node.get_node("MeshInstance3D").set_material_override(material)
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_healthbar)
 		node.ammo_changed.connect(update_ammo)
