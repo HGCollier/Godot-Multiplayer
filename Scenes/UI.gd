@@ -2,6 +2,8 @@ extends CanvasLayer
 
 @onready var main_menu = $MainMenu
 @onready var ip_address = $MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/IPAddress
+@onready var hud = $HUD
+@onready var healthbar = $HUD/Healthbar
 
 const PLAYER = preload("res://Player.tscn")
 const PORT = 9999
@@ -9,6 +11,7 @@ var enet_peer = ENetMultiplayerPeer.new()
 
 func _on_host_button_pressed():
 	main_menu.hide()
+	hud.show()
 	
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -20,6 +23,7 @@ func _on_host_button_pressed():
 
 func _on_join_button_pressed():
 	main_menu.hide()
+	hud.show()
 	
 	enet_peer.create_client(ip_address.text, PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -28,6 +32,8 @@ func add_player(peer_id):
 	var player = PLAYER.instantiate()
 	player.name = str(peer_id)
 	$"..".add_child(player)
+	if player.is_multiplayer_authority():
+		player.health_changed.connect(update_healthbar)
 
 func remove_player(peer_id):
 	var player = $"..".get_node_or_null(str(peer_id))
@@ -46,3 +52,10 @@ func upnp_setup():
 	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP Port mapping failed! Error %s" % map_result)
 	
 	print("Success! IP address: %s" % upnp.query_external_address())
+	
+func update_healthbar(value):
+	healthbar.value = value
+
+func _on_multiplayer_spawner_spawned(node):
+	if node.is_multiplayer_authority():
+		node.health_changed.connect(update_healthbar)

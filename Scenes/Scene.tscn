@@ -1,8 +1,15 @@
-[gd_scene load_steps=17 format=3 uid="uid://bj2drn3jdbyhw"]
+[gd_scene load_steps=20 format=3 uid="uid://bj2drn3jdbyhw"]
 
 [ext_resource type="Texture2D" uid="uid://c6cxdg7n0i613" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="1_a80r3"]
 [ext_resource type="Texture2D" uid="uid://chpirswlufyr4" path="res://addons/kenney_prototype_textures/orange/texture_10.png" id="2_e8md5"]
+[ext_resource type="Texture2D" uid="uid://bbe810fjj7ua" path="res://addons/kenney_particle_pack/circle_05.png" id="2_msgmc"]
 [ext_resource type="Script" path="res://Scenes/UI.gd" id="4_5rjyl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fdpog"]
+bg_color = Color(0.137255, 0.180392, 0.121569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0plq2"]
+bg_color = Color(0.219608, 0.439216, 0.2, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2e2fn"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -106,6 +113,44 @@ text = "Join"
 layout_mode = 2
 text = "Host"
 
+[node name="HUD" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.03, 0.03)
+pivot_offset = Vector2(576, 324)
+texture = ExtResource("2_msgmc")
+stretch_mode = 5
+
+[node name="Healthbar" type="ProgressBar" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -42.0
+offset_right = 288.0
+offset_bottom = -20.0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_fdpog")
+theme_override_styles/fill = SubResource("StyleBoxFlat_0plq2")
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 shadow_enabled = true
@@ -158,3 +203,4 @@ spawn_path = NodePath("..")
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/JoinButton" to="CanvasLayer" method="_on_join_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/HostButton" to="CanvasLayer" method="_on_host_button_pressed"]
+[connection signal="spawned" from="MultiplayerSpawner" to="CanvasLayer" method="_on_multiplayer_spawner_spawned"]

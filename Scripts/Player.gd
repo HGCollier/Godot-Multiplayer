@@ -6,9 +6,14 @@ const JUMP_VELOCITY = 8
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
+signal health_changed(health)
+
 @onready var camera = $Camera3D
 @onready var animation_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
+@onready var raycast = $Camera3D/RayCast3D
+
+var health = 5
 
 func _ready():
 	if not is_multiplayer_authority(): return
@@ -37,6 +42,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 	if event.is_action_pressed("shoot") and animation_player.current_animation != "shoot":
 		play_shoot_effects.rpc()
+		if raycast.is_colliding():
+			var hit_player = raycast.get_collider()
+			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
@@ -75,6 +83,15 @@ func play_shoot_effects():
 	animation_player.play("shoot")
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
+
+@rpc("any_peer")
+func receive_damage():
+	health -= 1
+	if health <= 0:
+		health = 5
+		position = Vector3.ZERO
+		position.y += 1
+	health_changed.emit(health)
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":
