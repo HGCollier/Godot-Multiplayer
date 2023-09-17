@@ -31,11 +31,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_y(-event.relative.x * 0.002)
 		camera.rotate_x(-event.relative.y * 0.002)
 		camera.rotation.x = clamp(camera.rotation.x, -PI / 2, PI / 2)
-		return
 	
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		return
 		
 	if event is InputEventMouseButton:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -44,6 +42,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		play_shoot_effects.rpc()
 		if raycast.is_colliding():
 			var hit_player = raycast.get_collider()
+			if not hit_player.is_in_group("Player"):
+				return
 			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 
 func _physics_process(delta: float) -> void:
@@ -54,8 +54,16 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 
 	# Handle Jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+
+	if InputEventJoypadMotion:
+		var axis_vector = Vector2.ZERO
+		axis_vector.x = Input.get_action_strength("look_right") - Input.get_action_strength("look_left")
+		axis_vector.y = Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
+		rotate_y(deg_to_rad(-axis_vector.x) * 2)
+		camera.rotate_x(deg_to_rad(-axis_vector.y) * 1)
+		camera.rotation.x = clamp(camera.rotation.x, -PI / 2, PI / 2)
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
