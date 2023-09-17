@@ -6,7 +6,7 @@ extends CanvasLayer
 @onready var healthbar = $HUD/Healthbar
 
 const PLAYER = preload("res://Player.tscn")
-const PORT = 9989
+const PORT = 25575
 var enet_peer = ENetMultiplayerPeer.new()
 
 func _on_host_button_pressed():
