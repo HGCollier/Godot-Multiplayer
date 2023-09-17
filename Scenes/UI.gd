@@ -6,7 +6,7 @@ extends CanvasLayer
 @onready var healthbar = $HUD/Healthbar
 
 const PLAYER = preload("res://Player.tscn")
-const PORT = 25575
+const PORT = 25576
 var enet_peer = ENetMultiplayerPeer.new()
 
 func _on_host_button_pressed():
@@ -46,7 +46,8 @@ func upnp_setup():
 	var discover_result = upnp.discover()
 	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP discover failed! Error %s" % discover_result)
 	
-	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), "UPNP invalid gateway")
+	var gateway = upnp.get_gateway()
+	assert(gateway and gateway.is_valid_gateway(), "UPNP invalid gateway")
 	
 	var map_result = upnp.add_port_mapping(PORT)
 	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, "UPNP Port mapping failed! Error %s" % map_result)
