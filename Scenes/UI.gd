@@ -6,7 +6,7 @@ extends CanvasLayer
 @onready var healthbar = $HUD/VBoxContainer/Healthbar
 @onready var ammo = $HUD/VBoxContainer/Ammo
 
-const PLAYER = preload("res://Player.tscn")
+const PLAYER = preload("res://Scenes/Player.tscn")
 const PORT = 25576
 var enet_peer = ENetMultiplayerPeer.new()
 
@@ -21,6 +21,8 @@ func _on_host_button_pressed():
 	
 	add_player(multiplayer.get_unique_id())
 	upnp_setup()
+	
+	print("HOST: ", multiplayer.get_unique_id())
 
 func _on_join_button_pressed():
 	main_menu.hide()
@@ -33,11 +35,6 @@ func add_player(peer_id):
 	var player = PLAYER.instantiate()
 	player.name = str(peer_id)
 	$"..".add_child(player)
-	var rng = RandomNumberGenerator.new()
-	rng.seed = peer_id
-	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(rng.randi_range(0, 1), rng.randi_range(0, 1), rng.randi_range(0, 1))
-	player.get_node("MeshInstance3D").set_material_override(material)
 	if player.is_multiplayer_authority():
 		player.health_changed.connect(update_healthbar)
 		player.ammo_changed.connect(update_ammo)
@@ -68,11 +65,9 @@ func update_ammo(value):
 	ammo.text = "%s/∞" % value
 
 func _on_multiplayer_spawner_spawned(node):
-	var rng = RandomNumberGenerator.new()
-	rng.seed = str(node.name).to_int()
 	var material = StandardMaterial3D.new()
-	material.albedo_color = Color(rng.randi_range(0, 1), rng.randi_range(0, 1), rng.randi_range(0, 1))
-	node.get_node("MeshInstance3D").set_material_override(material)
+	material.albedo_color = node.color
+	node.mesh.set_material_override(material)
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_healthbar)
 		node.ammo_changed.connect(update_ammo)

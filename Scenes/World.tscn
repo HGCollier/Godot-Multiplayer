@@ -1,73 +1,74 @@
-[gd_scene load_steps=22 format=3 uid="uid://bj2drn3jdbyhw"]
+[gd_scene load_steps=23 format=3 uid="uid://blu4b0wwwitd"]
 
-[ext_resource type="Texture2D" uid="uid://c6cxdg7n0i613" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="1_a80r3"]
-[ext_resource type="Texture2D" uid="uid://chpirswlufyr4" path="res://addons/kenney_prototype_textures/orange/texture_10.png" id="2_e8md5"]
-[ext_resource type="Texture2D" uid="uid://bbe810fjj7ua" path="res://addons/kenney_particle_pack/circle_05.png" id="2_msgmc"]
-[ext_resource type="Script" path="res://Scripts/Deadzone.gd" id="3_gimnl"]
-[ext_resource type="Script" path="res://Scenes/UI.gd" id="4_5rjyl"]
+[ext_resource type="Script" path="res://Scenes/Server.gd" id="1_byusv"]
+[ext_resource type="Texture2D" uid="uid://bbe810fjj7ua" path="res://addons/kenney_particle_pack/circle_05.png" id="2_a5pvi"]
+[ext_resource type="Script" path="res://Scenes/HUD.gd" id="2_s8kwj"]
+[ext_resource type="Script" path="res://Scripts/Deadzone.gd" id="3_g50w5"]
+[ext_resource type="Texture2D" uid="uid://c6cxdg7n0i613" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="4_py8nw"]
+[ext_resource type="Texture2D" uid="uid://chpirswlufyr4" path="res://addons/kenney_prototype_textures/orange/texture_10.png" id="5_hdv30"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fdpog"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmmef"]
 bg_color = Color(0.137255, 0.180392, 0.121569, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0plq2"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_on2d8"]
 bg_color = Color(0.219608, 0.439216, 0.2, 1)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2e2fn"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f4sra"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_srngq"]
-sky_material = SubResource("ProceduralSkyMaterial_2e2fn")
+[sub_resource type="Sky" id="Sky_2qciu"]
+sky_material = SubResource("ProceduralSkyMaterial_f4sra")
 
-[sub_resource type="Environment" id="Environment_hv6vf"]
+[sub_resource type="Environment" id="Environment_14hlh"]
 background_mode = 2
-sky = SubResource("Sky_srngq")
+sky = SubResource("Sky_2qciu")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_uns4t"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_uxfem"]
 data = PackedVector3Array(50, 0, 50, -50, 0, 50, 50, 0, -50, -50, 0, 50, -50, 0, -50, 50, 0, -50)
 
-[sub_resource type="BoxMesh" id="BoxMesh_oak0v"]
+[sub_resource type="BoxMesh" id="BoxMesh_yy7u6"]
 size = Vector3(50, 1, 50)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3s0ur"]
-albedo_texture = ExtResource("1_a80r3")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vpofc"]
+albedo_texture = ExtResource("4_py8nw")
 uv1_triplanar = true
 grow_amount = -0.36
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_fc6ad"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ut0be"]
 data = PackedVector3Array(-25, 0.5, 25, 25, 0.5, 25, -25, -0.5, 25, 25, 0.5, 25, 25, -0.5, 25, -25, -0.5, 25, 25, 0.5, -25, -25, 0.5, -25, 25, -0.5, -25, -25, 0.5, -25, -25, -0.5, -25, 25, -0.5, -25, 25, 0.5, 25, 25, 0.5, -25, 25, -0.5, 25, 25, 0.5, -25, 25, -0.5, -25, 25, -0.5, 25, -25, 0.5, -25, -25, 0.5, 25, -25, -0.5, -25, -25, 0.5, 25, -25, -0.5, 25, -25, -0.5, -25, 25, 0.5, 25, -25, 0.5, 25, 25, 0.5, -25, -25, 0.5, 25, -25, 0.5, -25, 25, 0.5, -25, -25, -0.5, 25, 25, -0.5, 25, -25, -0.5, -25, 25, -0.5, 25, 25, -0.5, -25, -25, -0.5, -25)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlp5u"]
-albedo_texture = ExtResource("2_e8md5")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uj46t"]
+albedo_texture = ExtResource("5_hdv30")
 uv1_triplanar = true
 
-[sub_resource type="BoxMesh" id="BoxMesh_41lhg"]
-material = SubResource("StandardMaterial3D_hlp5u")
+[sub_resource type="BoxMesh" id="BoxMesh_imbd4"]
+material = SubResource("StandardMaterial3D_uj46t")
 size = Vector3(10, 2.5, 5)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vgr1c"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_edx54"]
 data = PackedVector3Array(-5, 1.25, 2.5, 5, 1.25, 2.5, -5, -1.25, 2.5, 5, 1.25, 2.5, 5, -1.25, 2.5, -5, -1.25, 2.5, 5, 1.25, -2.5, -5, 1.25, -2.5, 5, -1.25, -2.5, -5, 1.25, -2.5, -5, -1.25, -2.5, 5, -1.25, -2.5, 5, 1.25, 2.5, 5, 1.25, -2.5, 5, -1.25, 2.5, 5, 1.25, -2.5, 5, -1.25, -2.5, 5, -1.25, 2.5, -5, 1.25, -2.5, -5, 1.25, 2.5, -5, -1.25, -2.5, -5, 1.25, 2.5, -5, -1.25, 2.5, -5, -1.25, -2.5, 5, 1.25, 2.5, -5, 1.25, 2.5, 5, 1.25, -2.5, -5, 1.25, 2.5, -5, 1.25, -2.5, 5, 1.25, -2.5, -5, -1.25, 2.5, 5, -1.25, 2.5, -5, -1.25, -2.5, 5, -1.25, 2.5, 5, -1.25, -2.5, -5, -1.25, -2.5)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_04ff8"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_l0shw"]
 data = PackedVector3Array(-5, 1.25, 2.5, 5, 1.25, 2.5, -5, -1.25, 2.5, 5, 1.25, 2.5, 5, -1.25, 2.5, -5, -1.25, 2.5, 5, 1.25, -2.5, -5, 1.25, -2.5, 5, -1.25, -2.5, -5, 1.25, -2.5, -5, -1.25, -2.5, 5, -1.25, -2.5, 5, 1.25, 2.5, 5, 1.25, -2.5, 5, -1.25, 2.5, 5, 1.25, -2.5, 5, -1.25, -2.5, 5, -1.25, 2.5, -5, 1.25, -2.5, -5, 1.25, 2.5, -5, -1.25, -2.5, -5, 1.25, 2.5, -5, -1.25, 2.5, -5, -1.25, -2.5, 5, 1.25, 2.5, -5, 1.25, 2.5, 5, 1.25, -2.5, -5, 1.25, 2.5, -5, 1.25, -2.5, 5, 1.25, -2.5, -5, -1.25, 2.5, 5, -1.25, 2.5, -5, -1.25, -2.5, 5, -1.25, 2.5, 5, -1.25, -2.5, -5, -1.25, -2.5)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wjngy"]
-albedo_texture = ExtResource("2_e8md5")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jav2o"]
+albedo_texture = ExtResource("5_hdv30")
 uv1_triplanar = true
 
-[sub_resource type="BoxMesh" id="BoxMesh_8yc2n"]
-material = SubResource("StandardMaterial3D_wjngy")
+[sub_resource type="BoxMesh" id="BoxMesh_t3der"]
+material = SubResource("StandardMaterial3D_jav2o")
 size = Vector3(3, 1, 5)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_52cad"]
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0h6ya"]
 data = PackedVector3Array(-1.5, 0.5, 2.5, 1.5, 0.5, 2.5, -1.5, -0.5, 2.5, 1.5, 0.5, 2.5, 1.5, -0.5, 2.5, -1.5, -0.5, 2.5, 1.5, 0.5, -2.5, -1.5, 0.5, -2.5, 1.5, -0.5, -2.5, -1.5, 0.5, -2.5, -1.5, -0.5, -2.5, 1.5, -0.5, -2.5, 1.5, 0.5, 2.5, 1.5, 0.5, -2.5, 1.5, -0.5, 2.5, 1.5, 0.5, -2.5, 1.5, -0.5, -2.5, 1.5, -0.5, 2.5, -1.5, 0.5, -2.5, -1.5, 0.5, 2.5, -1.5, -0.5, -2.5, -1.5, 0.5, 2.5, -1.5, -0.5, 2.5, -1.5, -0.5, -2.5, 1.5, 0.5, 2.5, -1.5, 0.5, 2.5, 1.5, 0.5, -2.5, -1.5, 0.5, 2.5, -1.5, 0.5, -2.5, 1.5, 0.5, -2.5, -1.5, -0.5, 2.5, 1.5, -0.5, 2.5, -1.5, -0.5, -2.5, 1.5, -0.5, 2.5, 1.5, -0.5, -2.5, -1.5, -0.5, -2.5)
 
-[node name="Scene" type="Node3D"]
+[node name="World" type="Node"]
+script = ExtResource("1_byusv")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-script = ExtResource("4_5rjyl")
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
 anchors_preset = 15
@@ -104,6 +105,11 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 5
 
+[node name="Name" type="LineEdit" parent="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Name"
+alignment = 1
+
 [node name="IPAddress" type="LineEdit" parent="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "IP Address"
@@ -126,6 +132,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+script = ExtResource("2_s8kwj")
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/HUD"]
 layout_mode = 1
@@ -140,7 +147,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.03, 0.03)
 pivot_offset = Vector2(-7.68, -7.68)
-texture = ExtResource("2_msgmc")
+texture = ExtResource("2_a5pvi")
 stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD"]
@@ -163,8 +170,8 @@ text = "6/∞"
 [node name="Healthbar" type="ProgressBar" parent="CanvasLayer/HUD/VBoxContainer"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_fdpog")
-theme_override_styles/fill = SubResource("StyleBoxFlat_0plq2")
+theme_override_styles/background = SubResource("StyleBoxFlat_cmmef")
+theme_override_styles/fill = SubResource("StyleBoxFlat_on2d8")
 max_value = 5.0
 value = 5.0
 show_percentage = false
@@ -174,7 +181,7 @@ transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_hv6vf")
+environment = SubResource("Environment_14hlh")
 
 [node name="Environment" type="Node3D" parent="."]
 
@@ -182,53 +189,49 @@ environment = SubResource("Environment_hv6vf")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.2173, 0)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("3_gimnl")
+script = ExtResource("3_g50w5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Deadzone"]
-shape = SubResource("ConcavePolygonShape3D_uns4t")
+shape = SubResource("ConcavePolygonShape3D_uxfem")
 
 [node name="Floor" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-mesh = SubResource("BoxMesh_oak0v")
+mesh = SubResource("BoxMesh_yy7u6")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_3s0ur")
+surface_material_override/0 = SubResource("StandardMaterial3D_vpofc")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Floor"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Floor/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_fc6ad")
+shape = SubResource("ConcavePolygonShape3D_ut0be")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(0.618861, 0, 0.785501, 0, 1, 0, -0.785501, 0, 0.618861, 7.54623, 0.633528, 11.9735)
-mesh = SubResource("BoxMesh_41lhg")
+mesh = SubResource("BoxMesh_imbd4")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/MeshInstance3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/MeshInstance3D/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_vgr1c")
+shape = SubResource("ConcavePolygonShape3D_edx54")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(0.874179, 0, -0.485603, 0, 1, 0, 0.485603, 0, 0.874179, -12.454, 0.138468, -11.026)
-mesh = SubResource("BoxMesh_41lhg")
+mesh = SubResource("BoxMesh_imbd4")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/MeshInstance3D2"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/MeshInstance3D2/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_04ff8")
+shape = SubResource("ConcavePolygonShape3D_l0shw")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(0.475348, 0, -0.879798, 0, 1, 0, 0.879798, 0, 0.475348, -8.75069, -0.00419116, -7.95531)
-mesh = SubResource("BoxMesh_8yc2n")
+mesh = SubResource("BoxMesh_t3der")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/MeshInstance3D3"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/MeshInstance3D3/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_52cad")
+shape = SubResource("ConcavePolygonShape3D_0h6ya")
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://Scenes/Player.tscn")
-spawn_path = NodePath("..")
-
-[connection signal="pressed" from="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/JoinButton" to="CanvasLayer" method="_on_join_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/HostButton" to="CanvasLayer" method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/PanelContainer/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="body_entered" from="Environment/Deadzone" to="Environment/Deadzone" method="_on_body_entered"]

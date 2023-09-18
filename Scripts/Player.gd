@@ -14,21 +14,37 @@ signal ammo_changed(ammo)
 @onready var animation_player = $AnimationPlayer
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
+@onready var mesh = $MeshInstance3D
+@onready var eyes = $Eyes
+@onready var label = $Label3D
 
 var health = 5
 var ammo = MAX_AMMO
+var color: Color = Color(0, 0, 0)
+var username: String:
+	get:
+		return username
+	set(value):
+		username = value
+		label.text = value
 
 func _ready():
-	if not is_multiplayer_authority(): return
+	name = str(get_multiplayer_authority())
+	var material = StandardMaterial3D.new()
+	material.albedo_color = color
+	mesh.set_material_override(material)
 	
+	if not is_multiplayer_authority():
+		return
+		
+	label.hide()
+	eyes.hide()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	camera.current = true		
-
-func _enter_tree():
-	set_multiplayer_authority(str(name).to_int())
+	camera.current = true
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority():
+		return
 	
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * 0.002)
@@ -45,10 +61,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 		
 	if event.is_action_pressed("reload"):
-		animation_player.stop()
-		animation_player.play("reload")
-		ammo = MAX_AMMO
-		ammo_changed.emit(ammo)
+		play_reload_effects.rpc()
 		return
 		
 	if event.is_action_pressed("shoot") and ammo > 0:
@@ -60,7 +73,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			hit_player.receive_damage.rpc_id(hit_player.get_multiplayer_authority())
 
 func _physics_process(delta: float) -> void:
-	if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority():
+		return
 	
 	# Add the gravity.
 	if not is_on_floor():
@@ -107,6 +121,13 @@ func play_shoot_effects():
 	muzzle_flash.restart()
 	muzzle_flash.emitting = true
 	ammo -= 1
+	ammo_changed.emit(ammo)
+	
+@rpc("call_local")
+func play_reload_effects():
+	animation_player.stop()
+	animation_player.play("reload")
+	ammo = MAX_AMMO
 	ammo_changed.emit(ammo)
 
 @rpc("any_peer")
