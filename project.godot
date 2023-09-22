@@ -15,10 +15,6 @@ run/main_scene="res://Scenes/World.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 
-[debug]
-
-settings/stdout/verbose_stdout=true
-
 [dotnet]
 
 project/assembly_name="Godot Multiplayer"

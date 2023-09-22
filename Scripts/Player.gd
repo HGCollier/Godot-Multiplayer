@@ -12,11 +12,13 @@ signal ammo_changed(ammo)
 
 @onready var camera = $Camera3D
 @onready var animation_player = $AnimationPlayer
+@onready var pistol = $Camera3D/Pistol
 @onready var muzzle_flash = $Camera3D/Pistol/MuzzleFlash
 @onready var raycast = $Camera3D/RayCast3D
 @onready var mesh = $MeshInstance3D
 @onready var eyes = $Eyes
 @onready var label = $Label3D
+@onready var ragdoll_clone = $RigidClone
 
 var health = 5
 var ammo = MAX_AMMO
@@ -26,9 +28,10 @@ var username: String:
 		return username
 	set(value):
 		username = value
-		label.text = value
+		update_label.rpc(value)
 
 func _ready():
+	ragdoll_clone.freeze = true
 	name = str(get_multiplayer_authority())
 	var material = StandardMaterial3D.new()
 	material.albedo_color = color
@@ -133,18 +136,50 @@ func play_reload_effects():
 @rpc("any_peer")
 func receive_damage():
 	health -= 1
-	if health <= 0:
-		respawn_player.rpc()
 	health_changed.emit(health)
+	if health <= 0:
+		ragdoll.rpc()
+		await get_tree().create_timer(4).timeout
+		respawn_player.rpc()
+	
+@rpc("call_local")
+func ragdoll():
+	mesh.hide()
+	eyes.hide()
+	pistol.hide()
+	if is_multiplayer_authority():
+		return
+	var _ragdoll = RigidBody3D.new()
+	var _mesh_instance = MeshInstance3D.new()
+	var _collision_shape = CollisionShape3D.new()
+	_mesh_instance.mesh = CapsuleMesh.new()
+	_collision_shape.shape = CapsuleShape3D.new()
+	_ragdoll.add_child(_mesh_instance)
+	_ragdoll.add_child(_collision_shape)
+	_ragdoll.apply_impulse(Vector3(10, 10, 0), Vector3.ZERO)
+	get_parent().add_child(_ragdoll)
+
+@rpc("call_local")
+func update_label(text):
+	label.text = text
 
 @rpc("call_local")
 func respawn_player():
+	pistol.show()
+	ragdoll_clone.hide()
+	ragdoll_clone.freeze = true
+	ragdoll_clone.position = Vector3.ZERO
+	ragdoll_clone.rotation = Vector3.ZERO
 	health = 5
 	ammo = MAX_AMMO
 	position = Vector3.ZERO
 	position.y += 1
 	health_changed.emit(health)
 	ammo_changed.emit(ammo)
+	if is_multiplayer_authority():
+		return
+	mesh.show()
+	eyes.show()
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "shoot":

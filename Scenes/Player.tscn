@@ -206,10 +206,6 @@ properties/2/path = NodePath("Camera3D:rotation")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
-properties/3/path = NodePath("Label3D:text")
-properties/3/spawn = true
-properties/3/sync = true
-properties/3/watch = false
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -284,5 +280,42 @@ replication_config = SubResource("SceneReplicationConfig_3juha")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27603, 0)
 billboard = 1
 text = "Username"
+
+[node name="RigidClone" type="RigidBody3D" parent="."]
+visible = false
+collision_layer = 4
+
+[node name="Eyes" type="Node3D" parent="RigidClone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4366, -0.455253)
+
+[node name="LeftEye" type="Node3D" parent="RigidClone/Eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0)
+
+[node name="Iris" type="MeshInstance3D" parent="RigidClone/Eyes/LeftEye"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0342569)
+mesh = SubResource("SphereMesh_ks6qq")
+skeleton = NodePath("../../../MeshInstance3D")
+
+[node name="Mesh" type="MeshInstance3D" parent="RigidClone/Eyes/LeftEye"]
+mesh = SubResource("SphereMesh_62moq")
+skeleton = NodePath("../../../MeshInstance3D")
+
+[node name="RightEye" type="Node3D" parent="RigidClone/Eyes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0, 0)
+
+[node name="Iris" type="MeshInstance3D" parent="RigidClone/Eyes/RightEye"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0342569)
+mesh = SubResource("SphereMesh_ks6qq")
+skeleton = NodePath("../../../MeshInstance3D")
+
+[node name="Mesh" type="MeshInstance3D" parent="RigidClone/Eyes/RightEye"]
+mesh = SubResource("SphereMesh_62moq")
+skeleton = NodePath("../../../MeshInstance3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidClone"]
+mesh = SubResource("CapsuleMesh_d37o3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidClone"]
+shape = SubResource("ConvexPolygonShape3D_nb3il")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
